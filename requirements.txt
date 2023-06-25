@@ -1,0 +1,9 @@
+# local package
+-e .
+
+# external requirements
+absl-py==1.1.0
+advertools==0.13.1
+ 
+
+

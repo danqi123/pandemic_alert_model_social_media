@@ -1,0 +1,6 @@
+batch_size,64.0
+n_hidden,85.0
+n_layers,3.0
+num_epochs,400.0
+lr,0.001249464512293463
+dropout,0.1

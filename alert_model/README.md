@@ -1,10 +1,60 @@
-# Overview 
-The objective of this paper is to develop an early alert model using digital data traces (Google Trends and Twitter) for identifying COVID-19 outbreaks in Germany as a case study.
+# pandemic_alert_social_media
+==============================
 
-The work conatains three parts:
+The repository contains codes and data for the manuscript "Development of an early alert model for pandemic situations in Germany". 
+
+The paper conatains three parts:
 1. Generation of symptom corpus and preparation of Google Trends/Twitter longitudinal datasets with multidimentional symptom features.
 2. Log-linear regression model for up-/ down-trend analysis.
 3. Random Forest and LSTMs for up-/ down-trend forecasting.
+
+Project Organization
+------------
+
+    ├── LICENSE
+    ├── Makefile                        <- Makefile with commands like `make data` or `make train`
+    ├── README.md                       <- The top-level README for developers using this project.
+    ├── data
+    │   ├── Gold_standard               <- The final results of trend analysis (surveillance data)
+    │   ├── Combined                    <- The final results of trend analysis (Combined trace)
+    │   ├── Google_Trends               <- The final results of trend analysis (Google Trends)
+    │   ├── Twitter                     <- The final results of trend analysis (Twitter)
+    │   ├── Knowledge_graph             <- The final results of hypergeometric test.
+    │   ├── processed                   <- The retrieval Google Trends/ Twitter longitudinal datasets and symptoms with German translations.
+    │   └── raw                         <- The raw data of surveillance gold standards (confirmed cases, deaths, and hospitalization.)
+    │
+    ├── models                          <- Contains the optimal hyperparameters for constructing retrained models.
+    │
+    ├── reports                         <- Generated analysis as HTML, PDF, LaTeX, etc.
+    │   ├── data                        <- The final results of trend forecasting (Google and Combined trace)
+    │   └── figures                     <- Generated figures to be used in reporting
+    │
+    ├── requirements.txt                <- The requirements file for reproducing the analysis environment, e.g.
+    │                                      generated with `pip freeze > requirements.txt`
+    ├── CITATION.cff                    <- citation information of the package.
+    ├── setup.py                        <- makes project pip installable (pip install -e .) so src can be imported
+    ├── src                             <- Source code for use in this project.
+    │   ├── __init__.py                 <- Makes src a Python module
+    │   ├── pytrends                    <- The package used for retrieving daily Google Trends data. source: https://github.com/GeneralMills/pytrends/tree/master/pytrend
+    │   ├── date.py                     <- Scripts to process dates.
+    │   ├── startup.py                  <- Initialize important variables and folders.
+    │   ├── disease_network.py          <- Source Scripts to generate COVID-19 symptom corpus.
+    │   ├── knowledge_graph.py          <- Click file to generate COVID-19 symptom corpus.
+    │   ├── google_trends_daily.py      
+    │   ├── google_trends.py            <- Scripts to retrieve Google Trends data.
+    │   ├── twitter_api.py              <- Scripts to retrieve Twitter data.
+    │   ├── log_linear_regression.py    <- Source Scripts to perform log-linear regression model.
+    │   ├── cli_trend_analysis.py       <- Click file to perform log-linear regression model.
+    │   ├── RF_data_preprocessing.py    <- Scripts to preprocess data for performing Random Forest.  
+    │   ├── Random_Forest_optuna.py     <- Scripts to tune hyperparamters in Random Forest.
+    │   ├── Random_Forest.py            <- Run Random Forest models and evaluate on test set.
+    │   ├── LSTM_data_preprocessing.py  <- Scripts to preprocess data for LSTMs.
+    │   ├── LSTM_train_optuna.py        <- Scripts to tune hyperparameters in LSTMs.
+    │   ├── LSTM_train.py               <- Scripts to train LSTMs, evaluate on test set, and perform SHAP algorithm.
+    └── tox.ini                         <- tox file with settings for running tox; see tox.readthedocs.io
+
+
+--------
 
 ## Generate knowledge graph to get the symptom corpus.
 
@@ -142,17 +192,10 @@ forecasting horizon: consistent with the time interval in log-linear regression 
 #### 3. Run LSTMs
     Note: type: Google_confirmed_cases; Google_hospitalization; Combined_confirmed_cases; Combined_hospitalization
 
-    python3 LSTM_train_optuna.py --type=Google_confirmed_cases --forecasting_horizon=14 --tranining_length=28 --mode=train --GPU=0 --testset_split=2022-04-27
+    python3 LSTM_train_optuna.py --type=Google_confirmed_cases --forecasting_horizon=14 --tranining_length=28 --mode=train --GPU=0
 
-    python3 LSTM_train.py --type=Google_confirmed_cases --forecasting_horizon=14 --tranining_length=28 --GPU=0 --testset_split=2022-04-27
+    python3 LSTM_train.py
 
 All source code that is specific to this project.
 
 <p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>
-  
-
-
-
-
-
-

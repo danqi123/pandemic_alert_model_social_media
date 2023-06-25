@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+title: >-
+  Development of an early alert model for pandemic
+  situations in Germany
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Danqi
+    family-names: Wang
+    affiliation: Fraunhofer SCAI
+repository-code: >-
+  https://github.com/danqi123/pandemic_alert_model_social_media
+abstract: >-
+  The repository contains codes and data for the manuscript
+  "Development of an early alert model for pandemic
+  situations in Germany". 
+keywords:
+  - pandemic
+  - alert
+  - social media data
+  - statistical model
+  - machine learning
+  
+license: MIT
+version: 1.0.0
+date-released: '2023-06-25'

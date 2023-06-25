@@ -1,0 +1,6 @@
+n_estimators,300
+min_samples_split,5
+max_depth,25
+min_samples_leaf,2
+max_features,log2
+value,0.5592592592592593
