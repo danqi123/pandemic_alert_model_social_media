@@ -58,12 +58,14 @@ Project Organization
 
 ## Generate knowledge graph to get the symptom corpus.
 
-input data: symptoms from symptom ontology (https://www.ebi.ac.uk/ols/ontologies/symp) 
-convert .owl to .json: (http://vowl.visualdataweb.org/webvowl-old/webvowl-old.html)
-SYMP_ONTOLOGY = "data/raw/symp.json"
+**input data**: symptoms from symptom ontology (https://www.ebi.ac.uk/ols/ontologies/symp)
 
-output data: 
-the top German ymptoms from hypergeometric test with low p_value and high volume of co-occurances in SCAIView knowledge software (https://academia.scaiview.com/).
+              convert .owl to .json: (http://vowl.visualdataweb.org/webvowl-old/webvowl-old.html)
+              SYMP_ONTOLOGY = "data/raw/symp.json"
+
+**output data**: 
+The top German ymptoms from hypergeometric test with low p_value and high volume of co-occurances in SCAIView knowledge software (https://academia.scaiview.com/)
+
 (/data/Knowledge_graph/COVID/COVID_symptoms_from_hypergeometrictest.json)
 
 #### 1. Request SCAIView and get symptom_disease related IDs (CPU running time: 1h 55 min)
@@ -97,7 +99,7 @@ the top German ymptoms from hypergeometric test with low p_value and high volume
      Note: here we retieved Google and Twitter data from Jan 2020 to Jun 2022 as an example.
      and data is in 'data/processed/daily_google_german.csv' and 'data/processed/daily_twitter_german.csv'
 
-# Trend analysis
+## Trend analysis
 ### Background of trend analysis
 - **STL decomposition to get the trend of time series raw data**(https://www.statsmodels.org/dev/examples/notebooks/generated/stl_decomposition.html)
   - For Google Trends and Twitter, STL period: 30
@@ -161,8 +163,8 @@ the top German ymptoms from hypergeometric test with low p_value and high volume
     * This function will also print out the percentage of onsets of up-trends.
 
 --------
-# Trend forecasting
-## Random Forest
+## Trend forecasting
+### Random Forest
 Note: The forecasting horizon is set based on the result of trend analysis. We set the timepoints to split train/test sets.
 training length: 28 days
 forecasting horizon: consistent with the time interval in log-linear regression model: 14 days
@@ -189,7 +191,7 @@ forecasting horizon: consistent with the time interval in log-linear regression 
 
     python3 Random_Forest.py --proxy=Google --gold_standard=RKI_case --forecasting_horizon=14 --mode=test
 
-#### 3. Run LSTMs
+### LSTMs
     Note: type: Google_confirmed_cases; Google_hospitalization; Combined_confirmed_cases; Combined_hospitalization
 
     python3 LSTM_train_optuna.py --type=Google_confirmed_cases --forecasting_horizon=14 --tranining_length=28 --mode=train --GPU=0
