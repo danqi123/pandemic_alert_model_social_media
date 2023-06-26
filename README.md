@@ -14,7 +14,7 @@ Project Organization
     ├── LICENSE
     ├── Makefile                        <- Makefile with commands like `make data` or `make train`
     ├── README.md                       <- The top-level README for developers using this project.
-    ├── data
+    ├── data_repo
     │   ├── Gold_standard               <- The final results of trend analysis (surveillance data)
     │   ├── Combined                    <- The final results of trend analysis (Combined trace)
     │   ├── Google_Trends               <- The final results of trend analysis (Google Trends)
