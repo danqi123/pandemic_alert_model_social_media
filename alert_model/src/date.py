@@ -42,7 +42,7 @@ def filter_dates_trend_analysis(date_split: str, input_dates_list: list):
 def get_date_interval(gold_standard_dates_list: list, proxy_dates_list: list):
     test_date_hit = []
     time_diff = []
-    #proxy_dates_list = [date + datetime.timedelta(days=13) for date in proxy_dates_list]
+
     for d_standard in gold_standard_dates_list:
         for d_test in proxy_dates_list:
             diff = (d_test - d_standard).days

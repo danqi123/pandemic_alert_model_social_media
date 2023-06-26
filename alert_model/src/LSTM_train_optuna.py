@@ -6,7 +6,6 @@ import numpy as np
 import pandas as pd
 import optuna
 from tqdm import tqdm
-from sklearn.preprocessing import MinMaxScaler
 import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
@@ -159,7 +158,7 @@ def main_cv(trial, config):
 
     for fold_idx, (train_idx, valid_idx) in enumerate(fold.split(train_index), 1):
         subset_train = train_val.iloc[train_idx[0]:train_idx[-1]+config.training_length+1, :]
-        # normalize data
+        # normalize data_folder
         scaler = MinMaxScaler().fit(subset_train)
         train_data = scaler.transform(subset_train)
         train_data = pd.DataFrame(train_data, index = subset_train.index)
@@ -175,7 +174,7 @@ def main_cv(trial, config):
         train_loader = get_loader(config, train_loader)
         subset_val = train_val.iloc[valid_idx[0]:valid_idx[-1]+config.training_length+1, :]
 
-        # normalize validation data
+        # normalize validation data_folder
         val_data = scaler.transform(subset_val)
         val_data = pd.DataFrame(val_data, index = subset_val.index)
         feature_window_val_ = create_dataset(val_data, config.training_length)

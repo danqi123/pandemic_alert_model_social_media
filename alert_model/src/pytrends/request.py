@@ -26,7 +26,7 @@ class TrendReq(object):
     MULTIRANGE_INTEREST_OVER_TIME_URL = f'{BASE_TRENDS_URL}/api/widgetdata/multirange'
     INTEREST_BY_REGION_URL = f'{BASE_TRENDS_URL}/api/widgetdata/comparedgeo'
     RELATED_QUERIES_URL = f'{BASE_TRENDS_URL}/api/widgetdata/relatedsearches'
-    TRENDING_SEARCHES_URL = f'{BASE_TRENDS_URL}/hottrends/visualize/internal/data'
+    TRENDING_SEARCHES_URL = f'{BASE_TRENDS_URL}/hottrends/visualize/internal/data_folder'
     TOP_CHARTS_URL = f'{BASE_TRENDS_URL}/api/topcharts'
     SUGGESTIONS_URL = f'{BASE_TRENDS_URL}/api/autocomplete/'
     CATEGORIES_URL = f'{BASE_TRENDS_URL}/api/explore/pickers/category'
@@ -115,7 +115,7 @@ class TrendReq(object):
         :param method: the HTTP method ('get' or 'post')
         :param trim_chars: how many characters should be trimmed off the beginning of the content of the response
             before this is passed to the JSON parser
-        :param kwargs: any extra key arguments passed to the request builder (usually query parameters or data)
+        :param kwargs: any extra key arguments passed to the request builder (usually query parameters or data_folder)
         :return:
         """
         s = requests.session()
@@ -219,7 +219,7 @@ class TrendReq(object):
         return
 
     def interest_over_time(self):
-        """Request data from Google's Interest Over Time section and return a dataframe"""
+        """Request data_folder from Google's Interest Over Time section and return a dataframe"""
 
         over_time_payload = {
             # convert to string as requests will mangle
@@ -255,7 +255,7 @@ class TrendReq(object):
             del result_df[idx]
 
         if 'isPartial' in df:
-            # make other dataframe from isPartial key data
+            # make other dataframe from isPartial key data_folder
             # split list columns into seperate ones, remove brackets and split on comma
             df = df.fillna(False)
             result_df2 = df['isPartial'].apply(lambda x: pd.Series(
@@ -272,7 +272,7 @@ class TrendReq(object):
         return final
 
     def multirange_interest_over_time(self):
-        """Request data from Google's Interest Over Time section across different time ranges and return a dataframe"""
+        """Request data_folder from Google's Interest Over Time section across different time ranges and return a dataframe"""
 
         over_time_payload = {
             # convert to string as requests will mangle
@@ -316,7 +316,7 @@ class TrendReq(object):
 
     def interest_by_region(self, resolution='COUNTRY', inc_low_vol=False,
                            inc_geo_code=False):
-        """Request data from Google's Interest by Region section and return a dataframe"""
+        """Request data_folder from Google's Interest by Region section and return a dataframe"""
 
         # make the request
         region_payload = dict()
@@ -368,7 +368,7 @@ class TrendReq(object):
         return result_df
 
     def related_topics(self):
-        """Request data from Google's Related Topics section and return a dictionary of dataframes
+        """Request data_folder from Google's Related Topics section and return a dictionary of dataframes
 
         If no top and/or rising related topics are found, the value for the key "top" and/or "rising" will be None
         """
@@ -416,7 +416,7 @@ class TrendReq(object):
         return result_dict
 
     def related_queries(self):
-        """Request data from Google's Related Queries section and return a dictionary of dataframes
+        """Request data_folder from Google's Related Queries section and return a dictionary of dataframes
 
         If no top and/or rising related queries are found, the value for the key "top" and/or "rising" will be None
         """
@@ -466,7 +466,7 @@ class TrendReq(object):
         return result_dict
 
     def trending_searches(self, pn='united_states'):
-        """Request data from Google's Hot Searches section and return a dataframe"""
+        """Request data_folder from Google's Hot Searches section and return a dataframe"""
 
         # make the request
         # forms become obsolete due to the new TRENDING_SEARCHES_URL
@@ -479,7 +479,7 @@ class TrendReq(object):
         return result_df
 
     def today_searches(self, pn='US'):
-        """Request data from Google Daily Trends section and returns a dataframe"""
+        """Request data_folder from Google Daily Trends section and returns a dataframe"""
         forms = {'ns': 15, 'geo': pn, 'tz': '-180', 'hl': 'en-US'}
         req_json = self._get_data(
             url=TrendReq.TODAY_SEARCHES_URL,
@@ -493,7 +493,7 @@ class TrendReq(object):
         return result_df.iloc[:, -1]
 
     def realtime_trending_searches(self, pn='US', cat='all', count =300):
-        """Request data from Google Realtime Search Trends section and returns a dataframe"""
+        """Request data_folder from Google Realtime Search Trends section and returns a dataframe"""
         # Don't know what some of the params mean here, followed the nodejs library
         # https://github.com/pat310/google-trends-api/ 's implemenration
 
@@ -531,7 +531,7 @@ class TrendReq(object):
         return result_df
 
     def top_charts(self, date, hl='en-US', tz=300, geo='GLOBAL'):
-        """Request data from Google's Top Charts section and return a dataframe"""
+        """Request data_folder from Google's Top Charts section and return a dataframe"""
 
         try:
             date = int(date)
@@ -557,7 +557,7 @@ class TrendReq(object):
         return df
 
     def suggestions(self, keyword):
-        """Request data from Google's Keyword Suggestion dropdown and return a dictionary"""
+        """Request data_folder from Google's Keyword Suggestion dropdown and return a dictionary"""
 
         # make the request
         kw_param = quote(keyword)
@@ -572,7 +572,7 @@ class TrendReq(object):
         return req_json
 
     def categories(self):
-        """Request available categories data from Google's API and return a dictionary"""
+        """Request available categories data_folder from Google's API and return a dictionary"""
 
         params = {'hl': self.hl}
 

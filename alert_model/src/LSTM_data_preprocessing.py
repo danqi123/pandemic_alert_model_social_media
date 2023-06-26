@@ -1,4 +1,4 @@
-# Scripts used for preprocessing data for LSTMs.
+# Scripts used for preprocessing data_folder for LSTMs.
 
 import pandas as pd
 from startup import GOOGLE_LSTM, GOLD_STANDARD_TREND, COMBINED_LSTM

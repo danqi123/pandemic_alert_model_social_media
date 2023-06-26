@@ -44,7 +44,7 @@ def STL_decomposition(dataframe: pd.DataFrame, sym: str, period:int = 7) -> pd.D
 
 def linear_model(dataframe: pd.DataFrame, symptom: str, time_window: int, stride: int, alpha: float, proxy: str) -> pd.DataFrame:
     """
-    perform linear model on individual symptom or surveillance data,
+    perform linear model on individual symptom or surveillance data_folder,
     and generate up and down trend .csv file.
     """
     data = list(dataframe[symptom])
@@ -443,7 +443,7 @@ def symptom_get_up_down(input_file: str, window: int, sym: str, proxy: str, peri
     trend_df['order'] = list(range(trend_df.shape[0]))
     trend_df['date'] = trend_df.index
 
-    # slice data for performing trend analysis.
+    # slice data_folder for performing trend analysis.
     trend_df = trend_df.loc['2020-02-02':, :]
     linear_df = linear_model(trend_df, sym, time_window=window, stride=1, alpha=0.05, proxy=proxy)
 
@@ -569,7 +569,7 @@ def combined(proxy: str, symptoms: list, alpha: float, report_csv: bool, filter_
     trend_df['up/down trend'] = up_down_trend
     trend_df = trend_df.loc["2020-02-02":,:]
 
-    # transfer data to .csv file
+    # transfer data_folder to .csv file
     if report_csv:
         if proxy == "Google_Trends":
             output_file = f'{GOOGLE_TREND_METRICS}/Combined_Google_Trends_trend_file.csv'

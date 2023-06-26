@@ -1,16 +1,12 @@
-"""CLI module"""
-
+"""CLI module for generating symptom corpus."""
 
 import click
 import logging
 import json
-import os
 import pandas as pd
-
 from startup import SYMP_ONTOLOGY, COVID_KG_DIR, SCAIVIEW_SYMPTOM, REPORT_FIG_DIR
 from disease_network import get_symptoms_synonyms, get_request, get_count_request, hypergeometric, get_top_symptoms_, get_sym_syn_list
 from statsmodels.stats.multitest import multipletests
-from collections import defaultdict
 from tqdm import tqdm
 import plotly.express as px
 import plotly.graph_objects as go
@@ -26,6 +22,7 @@ def KG():
 @KG.command(name = "get_symptom_disease_IDs")
 @click.argument('disease_flag')
 def get_symptom_disease_IDs(disease_flag: str) -> dict:
+
     """
     This function is used to request the SCAIView knowledge software with the input of disease name AND symptom terms. The output is the Unique IDs of iterature documents which are related to the disease and symptoms.
     Parameters
@@ -35,7 +32,6 @@ def get_symptom_disease_IDs(disease_flag: str) -> dict:
     -------
     A dictionary: key is the symptom list, value is the IDs of documents in SCAIView.
     """
-
     assert disease_flag == 'COVID'
     
     symptoms = get_symptoms_synonyms(SYMP_ONTOLOGY)
@@ -66,43 +62,40 @@ def get_disease_count() -> None:
 
 @KG.command(name='get_symptoms_count')
 def get_symptoms_count() -> None:
-	"""
+    """
 	This function is used to get the count of specific terms in SCAIView, and save the .csv and .json file.
 	"""
-	symptoms = get_symptoms_synonyms(SYMP_ONTOLOGY)
-	symptom_list = list(symptoms.values())
-	symptoms_count_dict = {}
-	sym_str = ''
+    symptoms = get_symptoms_synonyms(SYMP_ONTOLOGY)
+    symptom_list = list(symptoms.values())
+    symptoms_count_dict = {}
+    sym_str = ''
 
-	for sym in tqdm(symptom_list, desc='Iterating symptoms'):
-		print(f'{sym} is searched...')
-		if len(sym) > 1:
-			sym_str = ','.join(sym)
-		elif len(sym) == 1:
-			sym_str = sym[0]
-		count = get_count_request(sym)
-		if count:
-			symptoms_count_dict[sym_str] = count
-			print(f'{sym_str}:{count}')
-			logger.info(f'The number of {sym_str} related documents is counted.')
+    for sym in tqdm(symptom_list, desc='Iterating symptoms'):
+        print(f'{sym} is searched...')
+        if len(sym) > 1:
+            sym_str = ','.join(sym)
+        elif len(sym) == 1:
+            sym_str = sym[0]
+        count = get_count_request(sym)
+        if count:
+            symptoms_count_dict[sym_str] = count
+            print(f'{sym_str}:{count}')
+            logger.info(f'The number of {sym_str} related documents is counted.')
+        else:
+            logger.warning(f'{sym_str}: No documents found!')
 
-		else:
-			logger.warning(f'{sym_str}: No documents found!')
+    symptoms_count_df = pd.DataFrame.from_dict(symptoms_count_dict, orient='index', columns=['Count'])
+    symptoms_count_df.to_csv(f'{COVID_KG_DIR}/symptoms_count.csv')
 
-
-	symptoms_count_df = pd.DataFrame.from_dict(symptoms_count_dict, orient='index', columns=['Count'])
-	symptoms_count_df.to_csv(f'{COVID_KG_DIR}/symptoms_count.csv')
-
-	# write to json file.
-	with open(f'{COVID_KG_DIR}/symptoms_count.json', 'w') as fp:
-		json.dump(symptoms_count_dict, fp)
+    with open(f'{COVID_KG_DIR}/symptoms_count.json', 'w') as fp:
+        json.dump(symptoms_count_dict, fp)
 
 
 @KG.command(name='get_covid_symptoms')
 def get_covid_symptoms():
-	symptom_lists = get_sym_syn_list(SCAIVIEW_SYMPTOM, "german")
-	with open(f'{COVID_KG_DIR}/COVID_symptoms_from_hypergeometrictest.json', 'w') as fp:
-		json.dump(symptom_lists, fp)
+    symptom_lists = get_sym_syn_list(SCAIVIEW_SYMPTOM, "german")
+    with open(f'{COVID_KG_DIR}/COVID_symptoms_from_hypergeometrictest.json', 'w') as fp:
+        json.dump(symptom_lists, fp)
 
 @KG.command(name='perform_disease_hypergeo_test')
 @click.argument('disease')
@@ -116,7 +109,7 @@ def perform_disease_hypergeo_test(disease: str, verbose: bool, alpha: str) -> di
     verbose (bool): True
     print_top_symptoms (bool): True (print top 50 symptoms.)
     alpha (str): 0.05
-    
+
     Returns:
     dict: The dictionary of the result of hypergeometric test (sorted based on the p_values.)
     """
@@ -182,4 +175,4 @@ def show_plot(file: str, threshold: str) -> None:
 
 
 if __name__ == "__main__":
-	KG()
+    KG()

@@ -39,7 +39,7 @@ def get_google_trends_daily(key_word_list: list,
                             start: int,
                             end: int) -> None:
 
-    """Generate DAILY Google_Trends data."""
+    """Generate DAILY Google_Trends data_folder."""
     frames = []
     for keyword in tqdm(key_word_list):
         try:
@@ -68,7 +68,7 @@ def compile_google_trends(file: str, start_year: int, start_month: int, end_year
 
 if __name__ == "__main__":
     file_name = 'COVID_symptoms_from_hypergeometrictest.json'
-    # Note that it is better to slice the synonym list and let Google API retrieve the data one by one.
+    # Note that it is better to slice the synonym list and let Google API retrieve the data_folder one by one.
     compile_google_trends(file_name, 2020, 2, 2022, 6, "DE")
     
 

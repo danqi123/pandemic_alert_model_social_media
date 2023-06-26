@@ -3,7 +3,6 @@
 from startup import GOOGLE_FORECASTING_DATA, COMBINED_FORECASTING_DATA
 import pandas as pd
 import os
-import json
 import numpy as np
 from sklearn import model_selection
 from sklearn.ensemble import RandomForestClassifier

@@ -4,7 +4,6 @@ from startup import GOOGLE_FORECASTING_DATA, COMBINED_FORECASTING_DATA, GOOGLE_T
 import pandas as pd
 import os
 import numpy as np
-from sklearn.metrics import classification_report
 from sklearn.ensemble import RandomForestClassifier
 import joblib
 from sklearn.metrics import classification_report

@@ -32,10 +32,10 @@ def trend_analysis():
 def generate_gold_standard_trend(flag: str, window: str, stl_number: str) -> pd.DataFrame:
 
 	"""
-	Generate trend analysis on gold standards and get onset dates of up/down trend.
+	Generate trend analysis on gold standards and get onset dates of up- and down-trends.
 	"""
 
-	# Normalize the data
+	# Normalize the data_folder
 	if flag == "RKI_case":
 		df = read_csv(RKI)
 		df.index = df.pop('date')
@@ -54,7 +54,7 @@ def generate_gold_standard_trend(flag: str, window: str, stl_number: str) -> pd.
 	df['order'] = order_list
 	df['date'] = df.index
 
-	# perform STL on RKI data
+	# perform STL on RKI data_folder
 	stl = STL(df["normalized cases"], period=int(stl_number), robust=True)
 	result = stl.fit()
 	trend = result.trend.values.tolist()
@@ -289,15 +289,15 @@ def visualize_trend() -> None:
 	"""
 	Make a visualization plot of gold standard and digital trace up- and down-trends with their onsets.
 	"""
-	# read gold standard data
+	# read gold standard data_folder
 	RKI_case_data = read_csv(RKI)
 	RKI_death_data = read_csv(RKI_death)
 	RKI_hospitalization_data = read_csv(RKI_hospitalization)
 
-	# use STL to get the trend data from RKI case and RKI death.
+	# use STL to get the trend data_folder from RKI case and RKI death.
 	case_trend = STL_decomposition(RKI_case_data, "Case", 7)
 
-	# get the trainig period (slicing data)
+	# get the trainig period (slicing data_folder)
 	case_trend = case_trend.iloc[:-105, :] 
 	death_trend = STL_decomposition(RKI_death_data, "Death", 7)
 	death_trend = death_trend.iloc[:-105, :] 
@@ -322,7 +322,7 @@ def visualize_trend() -> None:
 	RKI_Death_Up_trend_list = death_dict["Up_trends"]
 	RKI_Death_Down_trend_list = death_dict["Down_trends"]
 
-    # get training dates for deaths
+	# get training dates for deaths
 	RKI_Death_Up_trend_list = filter_dates_trend_analysis("2022-03-01", RKI_Death_Up_trend_list)
 	RKI_Death_Down_trend_list = filter_dates_trend_analysis("2022-03-01", RKI_Death_Down_trend_list)
 
@@ -392,13 +392,13 @@ def plot_pairwise_trend_event(gold_standard: str, trend: str, flag: str, date_sp
 	google_trends = json.load(f2)
 	google_trend_date = google_trends[trend]
 
-
 	if flag == '2020_2022':
 		start = '2020-02-02'
 		end = '2022-06-15'
 	else:
 		raise IndexError("check correct time range.")
-    	# filter out dates for test
+
+	# filter out dates for test
 	google_trend_date = filter_dates_trend_analysis(date_split, google_trend_date)
 
 	gold_standard_filter_dates = filter_dates(start, end, gold_trend_date)
@@ -410,21 +410,6 @@ def plot_pairwise_trend_event(gold_standard: str, trend: str, flag: str, date_sp
 	print(google_gold_standard)
 	print(f'google_{trend}_{gold_standard}:', np.median(google_gold_standard))
 
-	# plot_pairwise(google_gold_standard, gold_standard, trend, flag)
-
-	# twitter_dates_file = f'{TWITTER_EVENT}/Twitter_up_and_down_hypergeo.json'
-	# f3 = open(twitter_dates_file)
-	# twitter = json.load(f3)
-	# twitter_date = twitter[trend]
-
-	# twitter_filter_dates = filter_dates(start, end, twitter_date)
-
-	# twitter_gold_standard = get_date_interval(gold_standard_dates_list=gold_standard_filter_dates,
-	# 										 proxy_dates_list=twitter_filter_dates)
-	# print(twitter_gold_standard)
-	# print(f'twitter_{trend}_{gold_standard}:', np.median(twitter_gold_standard))
-
-	# # plot_pairwise(twitter_gold_standard, gold_standard, trend, flag)
 
 	combined_dates_file = f'{COMBINED_EVENT}/Combined_up_and_down.json'
 	f3 = open(combined_dates_file)

@@ -1,12 +1,11 @@
-"""Module used to retrieve Twitter data."""
+"""Module used to retrieve Twitter data_folder."""
 
 import time
 import pandas as pd
 import tweepy
 import os.path
 from tqdm import tqdm
-from startup import TWITTER_DATA, SCAIVIEW_SYMPTOM, PROCESSED_DATA
-from log_linear_regression import get_sym_syn_list
+from startup import TWITTER_DATA, PROCESSED_DATA
 
 # credentials of academic Twitter developer API
 consumer_key = "xxxxxxxxxxx"
@@ -45,7 +44,7 @@ def read_tweet_count(syn_list: list):
     """
     new_df = pd.DataFrame()
     for sym in tqdm(syn_list, desc="Iterating through symptoms"):
-        df = pd.read_csv(f'{TWITTER_RAW}/{sym}_tweets_count.csv')
+        df = pd.read_csv(f'{TWITTER_DATA}/{sym}_tweets_count.csv')
         if not (df['tweet_count']==0).all():
             new_df['date'] = df['date']
             new_df[sym] = df['tweet_count']
@@ -57,19 +56,3 @@ def read_tweet_count(syn_list: list):
 
 
 if __name__ == "__main__":
-    
-    date_since = "2020-02-01T00:00:00Z"
-    end_date = "2022-06-30T00:00:00Z"
-
-    # SCAIView german symptoms related to COVID-19
-    symptom_lists = get_sym_syn_list(SCAIVIEW_SYMPTOM, "german")
-    
-    # function used to generate each tweet count file
-    for sym in tqdm(symptom_lists, desc="Iterating through symptoms"):
-        print(sym)
-        get_tweet_count(sym, date_since, end_date)
-
-    # function used to combine into one dataframe
-    read_tweet_count(symptom_lists)
-
-

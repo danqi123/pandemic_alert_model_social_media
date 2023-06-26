@@ -1,4 +1,4 @@
-"""Scripts used to preprocessing the data for Random Forest."""
+"""Scripts used to preprocessing the data_folder for Random Forest."""
 
 from startup import GOOGLE_TREND, TWITTER_TREND, GOOGLE_FORECASTING_DATA, GOLD_STANDARD_TREND, COMBINED_FORECASTING_DATA, GOOGLE_LSTM, COMBINED_LSTM, GOOGLE_TRENDS_DATA, TWITTER_DATA
 import pandas as pd
@@ -11,7 +11,7 @@ import datetime
 from log_linear_regression import transfer_date
 from sktime.forecasting.model_selection import SlidingWindowSplitter
 import warnings
-from collections import Counter
+
 warnings.filterwarnings("ignore")
 
 logger = logging.getLogger(__name__)
@@ -110,7 +110,7 @@ def create_dataset(X: pd.DataFrame, time_steps: int) -> np:
     """prepare sliding window dataset for trend forecasting. i.e. The training length is 28 days here.
 
     Args:
-        X (pd.DataFrame): the time series dataset with slope coefficients data from log-linear regression model.
+        X (pd.DataFrame): the time series dataset with slope coefficients data_folder from log-linear regression model.
         time_steps (int): we set it as 28 days (4 weeks)
 
     Returns:
@@ -145,7 +145,7 @@ def sliding_window(config, dataset: pd.DataFrame) -> tuple:
     """ sliding window approach to preprocess the dataset.
 
     Args:
-        dataset (pd.DataFrame): the slope coefficients of digital data trace
+        dataset (pd.DataFrame): the slope coefficients of digital data_folder trace
 
     Returns:
         tuple: sliding window feature space and label
@@ -294,8 +294,6 @@ def compile(config):
 
     if config.proxy == 'Google':
         RF_data_folder = os.path.join(GOOGLE_FORECASTING_DATA, 'RF_data')
-    elif config.proxy == 'Twitter':
-        RF_data_folder = os.path.join(TWITTER_FORECASTING_DATA, 'RF_data')
     elif config.proxy == 'Combined':
         RF_data_folder = os.path.join(COMBINED_FORECASTING_DATA, 'RF_data')
 

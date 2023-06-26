@@ -5,7 +5,6 @@ import warnings
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
-from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import classification_report
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
@@ -114,7 +113,7 @@ def load_dataset(config):
     config.n_features = train.shape[-1]
     config.feature_names = list(train.columns)
 
-    # normalize data
+    # normalize data_folder
     scaler = MinMaxScaler().fit(train)
     train_data = scaler.transform(train)
     train_data = pd.DataFrame(train_data)
@@ -179,7 +178,7 @@ def load_dataset(config):
     dataloader = get_loader(config, dataset_train)
     dataloader_test = get_loader(config, dataset_test, 1)
 
-    # get test index for report data
+    # get test index for report data_folder
     test_index = list(test.index)[config.training_length-1:][:len(test_labels)]
 
     return config, dataloader, dataloader_test, test_index
@@ -346,7 +345,6 @@ class Train(object):
 
         report_df.index= self.test_index
 
-        report_dict = {}
         report = classification_report(labels, predictions, output_dict=True)
         print(report)
 
@@ -354,9 +352,7 @@ class Train(object):
         splits = config.type.split('_')
         prox = splits[0]
         if prox == "Google":
-            file = GOOGLE_FORECASTING_REPORT_LSTM  
-        elif prox == "Twitter":
-            file = TWITTER_FORECASTING_REPORT_LSTM
+            file = GOOGLE_FORECASTING_REPORT_LSTM
         elif prox == "Combined":
             file = COMBINED_FORECASTING_REPORT_LSTM
         df_report.to_csv(f'{file}/LSTM_{config.type}_metrics.csv')
