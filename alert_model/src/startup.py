@@ -6,24 +6,24 @@ import logging
 logger = logging.getLogger(__name__)
 
 # Data file
-SYMP_ONTOLOGY = "../data_folder/raw/symp.json"
-RKI = "../data_folder/raw/RKI_covid_cases.csv"
-RKI_death = "../data_folder/raw/RKI_deaths.csv"
-RKI_hospitalization = "../data_folder/raw/RKI_hospitalization.csv"
-SCAIVIEW_SYMPTOM = "../data_folder/processed/symptom_translations.csv"
+SYMP_ONTOLOGY = "../data_repo/raw/symp.json"
+RKI = "../data_repo/raw/RKI_covid_cases.csv"
+RKI_death = "../data_repo/raw/RKI_deaths.csv"
+RKI_hospitalization = "../data_repo/raw/RKI_hospitalization.csv"
+SCAIVIEW_SYMPTOM = "../data_repo/processed/symptom_translations.csv"
 
 # default directory paths
-PROCESSED_DATA = "../data_folder/processed"
-RAW_DATA = "../data_folder/raw"
-KG_DATA = "../data_folder/Knowledge_graph"
-GOLD_STANDARD_DATA = "../data_folder/Gold_standard"
-GOOGLE_TRENDS_DATA = "../data_folder/Google_Trends"
-TWITTER_DATA = "../data_folder/Twitter"
-COMBINED_DATA = "../data_folder/Combined"
+PROCESSED_DATA = "../data_repo/processed"
+RAW_DATA = "../data_repo/raw"
+KG_DATA = "../data_repo/Knowledge_graph"
+GOLD_STANDARD_DATA = "../data_repo/Gold_standard"
+GOOGLE_TRENDS_DATA = "../data_repo/Google_Trends"
+TWITTER_DATA = "../data_repo/Twitter"
+COMBINED_DATA = "../data_repo/Combined"
 
-# processed data_folder of Google_Trends and Twitter (input data_folder of trend analysis)
-GOOGLE_TRENDS_DAILY = "../data_folder/processed/daily_google_german.csv"
-TWITTER_DAILY = "../data_folder/processed/daily_twitter_german.csv"
+# processed data of Google_Trends and Twitter (input data of trend analysis)
+GOOGLE_TRENDS_DAILY = "../data_repo/processed/daily_google_german.csv"
+TWITTER_DAILY = "../data_repo/processed/daily_twitter_german.csv"
 
 # folder for knowledge graph
 COVID_KG_DIR = os.path.join(KG_DATA, "COVID")
@@ -51,7 +51,7 @@ COMBINED_FORECASTING_DATA = os.path.join(COMBINED_DATA, "Trend_forecasting")
 GOOGLE_LSTM = os.path.join(GOOGLE_FORECASTING_DATA, 'lstm_data')
 COMBINED_LSTM = os.path.join(COMBINED_FORECASTING_DATA, 'lstm_data')
 
-# report data_folder folder
+# report data folder
 LOG_DIR = "../reports/scripts_logs"
 REPORT_FIG_DIR = "../reports/figures"
 REPORT_DATA_DIR = "../reports/data"

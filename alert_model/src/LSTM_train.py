@@ -113,7 +113,7 @@ def load_dataset(config):
     config.n_features = train.shape[-1]
     config.feature_names = list(train.columns)
 
-    # normalize data_folder
+    # normalize data
     scaler = MinMaxScaler().fit(train)
     train_data = scaler.transform(train)
     train_data = pd.DataFrame(train_data)
@@ -178,7 +178,7 @@ def load_dataset(config):
     dataloader = get_loader(config, dataset_train)
     dataloader_test = get_loader(config, dataset_test, 1)
 
-    # get test index for report data_folder
+    # get test index for report data
     test_index = list(test.index)[config.training_length-1:][:len(test_labels)]
 
     return config, dataloader, dataloader_test, test_index

@@ -1,4 +1,4 @@
-"""Module used to retrieve Twitter data_folder."""
+"""Module used to retrieve Twitter data."""
 
 import time
 import pandas as pd

@@ -228,7 +228,7 @@ def get_top_symptoms_(alpha: float, threshold: int) -> list:
     top_symptoms = new_df['symptom'][:threshold]
     print(f'The top 50 symptoms with lowest p_value are: \n{top_symptoms}')
     print('\n')
-    print('All symptom and synonyms with ascending p_values are saved in the csv file under folder: /data_folder/Knowledge_graph/COVID.')
+    print('All symptom and synonyms with ascending p_values are saved in the csv file under folder: /data/Knowledge_graph/COVID.')
     
     # save .csv file.
     new_df.to_csv(f'{COVID_KG_DIR}/COVID_sort_pvalue_occurances.csv')

@@ -35,7 +35,7 @@ def generate_gold_standard_trend(flag: str, window: str, stl_number: str) -> pd.
 	Generate trend analysis on gold standards and get onset dates of up- and down-trends.
 	"""
 
-	# Normalize the data_folder
+	# Normalize the data
 	if flag == "RKI_case":
 		df = read_csv(RKI)
 		df.index = df.pop('date')
@@ -54,7 +54,7 @@ def generate_gold_standard_trend(flag: str, window: str, stl_number: str) -> pd.
 	df['order'] = order_list
 	df['date'] = df.index
 
-	# perform STL on RKI data_folder
+	# perform STL on RKI data
 	stl = STL(df["normalized cases"], period=int(stl_number), robust=True)
 	result = stl.fit()
 	trend = result.trend.values.tolist()
@@ -289,15 +289,15 @@ def visualize_trend() -> None:
 	"""
 	Make a visualization plot of gold standard and digital trace up- and down-trends with their onsets.
 	"""
-	# read gold standard data_folder
+	# read gold standard data
 	RKI_case_data = read_csv(RKI)
 	RKI_death_data = read_csv(RKI_death)
 	RKI_hospitalization_data = read_csv(RKI_hospitalization)
 
-	# use STL to get the trend data_folder from RKI case and RKI death.
+	# use STL to get the trend data from RKI case and RKI death.
 	case_trend = STL_decomposition(RKI_case_data, "Case", 7)
 
-	# get the trainig period (slicing data_folder)
+	# get the trainig period (slicing data)
 	case_trend = case_trend.iloc[:-105, :] 
 	death_trend = STL_decomposition(RKI_death_data, "Death", 7)
 	death_trend = death_trend.iloc[:-105, :] 
