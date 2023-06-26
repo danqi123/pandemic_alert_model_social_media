@@ -66,13 +66,13 @@ Project Organization
 **output data**: 
 The top German ymptoms from hypergeometric test with low p_value and high volume of co-occurances in SCAIView knowledge software (https://academia.scaiview.com/)
 
-(/data/Knowledge_graph/COVID/COVID_symptoms_from_hypergeometrictest.json)
+(/data_repo/Knowledge_graph/COVID/COVID_symptoms_from_hypergeometrictest.json)
 
-#### 1. Request SCAIView and get symptom_disease related IDs (CPU running time: 1h 55 min)
+#### 1. Request SCAIView and get symptom_disease related IDs
     python3 knowledge_graph.py get_symptom_disease_IDs COVID
 #### 2. Get the number of document counts of each disease
     python3 knowledge_graph.py get_disease_count
-#### 3. Get the number of document counts of each symptom (CPU running time: 1h 36 min)
+#### 3. Get the number of document counts of each symptom
     python3 knowledge_graph.py get_symptoms_count
 #### 4. Get disease symptoms dict with corresponding p_values from hypergeometric test
     python3 knowledge_graph.py perform_disease_hypergeo_test COVID 0.05 -v

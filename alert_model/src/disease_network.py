@@ -239,6 +239,7 @@ def get_sym_syn_list(file: str, flag:str) -> list:
     This function will retrieve symptom or synonym German list with flag: German.
     """
     csv_dataframe = pd.read_csv(file, encoding='utf_8_sig')
+    print(csv_dataframe.shape)
     synonyms_list = []
     for synonyms in csv_dataframe[flag]:
         try:
