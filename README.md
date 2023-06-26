@@ -61,7 +61,7 @@ Project Organization
 **input data**: symptoms from symptom ontology (https://www.ebi.ac.uk/ols/ontologies/symp)
 
               convert .owl to .json: (http://vowl.visualdataweb.org/webvowl-old/webvowl-old.html)
-              SYMP_ONTOLOGY = "data/raw/symp.json"
+              SYMP_ONTOLOGY = "data_repo/raw/symp.json"
 
 **output data**: 
 The top German ymptoms from hypergeometric test with low p_value and high volume of co-occurances in SCAIView knowledge software (https://academia.scaiview.com/)
@@ -83,7 +83,7 @@ The top German ymptoms from hypergeometric test with low p_value and high volume
 #### 7. Symptom translation
     use DeepL software to translate the top English symptoms from Knowledge graph into German.
     Note: here we give an example of the german terms we retrieved till June 2022. If you translate the terms into France OR retrieve new data, you should replace the file with the route:
-    (SCAIVIEW_SYMPTOM = "/data/processed/symptom_translations.csv") 
+    (SCAIVIEW_SYMPTOM = "/data_repo/processed/symptom_translations.csv") 
 #### 8. Get German symptom terms
     input: the translated German symptoms.
     output: .json file contains the German symptom corpus.
@@ -136,7 +136,6 @@ The top German ymptoms from hypergeometric test with low p_value and high volume
     python3 cli_trend_analysis.py combined_proxy 20 Google_Trends 0.05 2022-03-01 -r -f
     python3 cli_trend_analysis.py combined_proxy 20 Twitter 0.05 2022-03-01 -r -f
     python3 cli_trend_analysis.py get_combined_P_trends 0.05 2022-03-01 -f
-
 #### 7. Get evaluation metrics for each digital trace (Google Trends, Twitter and Combined trace)
     python3 cli_trend_analysis.py generate_metrics_for_combined_proxy_or_combinedP Google_Trends RKI_case 2022-03-01
     python3 cli_trend_analysis.py generate_metrics_for_combined_proxy_or_combinedP Google_Trends RKI_death 2022-03-01
