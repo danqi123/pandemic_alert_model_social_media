@@ -3,14 +3,14 @@
 from plotly.subplots import make_subplots
 import pandas as pd
 import datetime
+import logging
 from math import log
 from statsmodels.tsa.seasonal import STL
 from date import filter_dates_trend_analysis
-import logging
 from tqdm import tqdm
 from scipy.stats import linregress
 from statsmodels.stats.multitest import multipletests
-import plotly.express as px
+from collections import Counter
 import plotly.graph_objects as go
 from startup import PROCESSED_DATA, TREND_VISUALIZATION_FIG, GOLD_STANDARD_TREND, GOOGLE_TREND, TWITTER_TREND, COMBINED_TREND, \
     GOOGLE_TREND_METRICS, TWITTER_TREND_METRICS, COMBINED_TREND_METRICS, COVID_KG_DIR, PAIRWISE_EVENT_FIG
@@ -118,7 +118,6 @@ def date_within_timeperiod(date: str, time_period: tuple) -> bool:
     else:
         return False
 
-
 def get_date_diff(date1, date2):
     """
     calculate the time difference between two dates.
@@ -130,16 +129,16 @@ def get_date_diff(date1, date2):
     interval = d2-d1
     return interval.days
 
-def get_date_hit(anomalies_list: list, trend_data: list) -> list:
-    """
-    calculate the anomalies dates within 30 days window ahead of up_trend or down_trend list.
-    """
-    date_hit = []
-    for d1 in anomalies_list:
-        for d2 in trend_data:
-            if 0 < get_date_diff(d1, d2) <= 30 and d1 not in date_hit:
-                date_hit.append(d1)
-    return date_hit
+# def get_date_hit(anomalies_list: list, trend_data: list) -> list:
+#     """
+#     Get the TP dates within 30 days window ahead of up-trend onsets of surveillance data.
+#     """
+#     date_hit = []
+#     for d1 in anomalies_list:
+#         for d2 in trend_data:
+#             if 0 < get_date_diff(d1, d2) <= 30 and d1 not in date_hit:
+#                 date_hit.append(d1)
+#     return date_hit
 
 
 def convert_list_to_str(list_: list) -> str:
@@ -152,7 +151,7 @@ def convert_list_to_str(list_: list) -> str:
 
 def filter_date(Case_up, Case_down) -> list:
     """
-    method used to filter the follow-up trend.
+    method used to filter the follow-up trend and only consider the first up-trend date.
     """
 
     i = 0
@@ -232,13 +231,16 @@ def get_date_hit_precision(proxy_dates: list, gold_standard_dates: list) -> list
 
     return proxy_date_hit
 
-def get_TP(flag:str, gold_standard: str, proxy_trend_file: str, date_split: str) -> tuple:
+def get_metrics(flag:str, gold_standard: str, proxy_trend_file: str, date_split: str) -> tuple:
     """
     this method is used to calculate the metrics for all cases.
     """
     gs = read_csv(gold_standard)
     proxy = read_csv(proxy_trend_file)
     proxy = proxy.set_index('date')
+
+    # since the up_trends started from 2020-03-02 for hospitalization surveillance data,
+    # here we just check the digital trace up_trends which were from 2020-02-02.
     proxy = proxy.loc['2020-02-02':, :]
 
     up_gs, down_gs = get_up_down_from_linear_model(gs, filter_dates=True)
@@ -399,34 +401,34 @@ def visualization_trend(case_trend:pd.DataFrame, death_trend:pd.DataFrame, hos_t
     fig.write_image(f"{TREND_VISUALIZATION_FIG}/visualization_trend_and_up_down_events.png", scale=5)
     return
 
-def plot_up_down(df: pd.DataFrame, linear_df: pd.DataFrame, sym: str, STL_period: int, up_trend_dates: list, down_trend_dates: list, linear_window: int, proxy: str, alpha:float = 0.05):
-    """
-    this function is used to plot the up and down trends from linear model.
-    """
-    up_trend_value = []
-    up_p_value = []
-    for d in up_trend_dates:
-        up_trend_value.extend(df[df["date"]==d][sym].tolist())
-        up_p_value.extend(linear_df[linear_df['date']==d][f'p_value Holm (alpha={alpha})'])
-    up_p_value = [elem*10 for elem in up_p_value]
-
-    down_trend_value = []
-    down_p_value = []
-    for d in down_trend_dates:
-        down_trend_value.extend(df[df["date"]==d][sym].tolist())
-        down_p_value.extend(linear_df[linear_df['date']==d][f'p_value Holm (alpha={alpha})'])
-    down_p_value = [elem*10 for elem in down_p_value]
-
-    fig = px.area(df, x="date", y=sym)
-    fig.add_trace(go.Scatter(x=up_trend_dates, y=up_trend_value, mode="markers", name='Up Trends', marker=dict(color="red", symbol="205", size=8)))
-    fig.add_trace(go.Scatter(x=down_trend_dates, y=down_trend_value, mode="markers", name='Down Trends', marker=dict(color="green", symbol="206", size=8)))
-
-    fig.update_layout(legend_orientation='h')
-    if proxy == "Google_Trends":
-        fig.write_image(f"{GOOGLE_LINEAR_MODEL_FIG}/STL_{STL_period}_window{linear_window}_{sym}.png")
-    else:
-        fig.write_image(f"{TWITTER_LINEAR_MODEL_FIG}/STL_{STL_period}_window{linear_window}_{sym}.png")
-    return
+# def plot_up_down(df: pd.DataFrame, linear_df: pd.DataFrame, sym: str, STL_period: int, up_trend_dates: list, down_trend_dates: list, linear_window: int, proxy: str, alpha:float = 0.05):
+#     """
+#     this function is used to plot the up and down trends from linear model.
+#     """
+#     up_trend_value = []
+#     up_p_value = []
+#     for d in up_trend_dates:
+#         up_trend_value.extend(df[df["date"]==d][sym].tolist())
+#         up_p_value.extend(linear_df[linear_df['date']==d][f'p_value Holm (alpha={alpha})'])
+#     up_p_value = [elem*10 for elem in up_p_value]
+#
+#     down_trend_value = []
+#     down_p_value = []
+#     for d in down_trend_dates:
+#         down_trend_value.extend(df[df["date"]==d][sym].tolist())
+#         down_p_value.extend(linear_df[linear_df['date']==d][f'p_value Holm (alpha={alpha})'])
+#     down_p_value = [elem*10 for elem in down_p_value]
+#
+#     fig = px.area(df, x="date", y=sym)
+#     fig.add_trace(go.Scatter(x=up_trend_dates, y=up_trend_value, mode="markers", name='Up Trends', marker=dict(color="red", symbol="205", size=8)))
+#     fig.add_trace(go.Scatter(x=down_trend_dates, y=down_trend_value, mode="markers", name='Down Trends', marker=dict(color="green", symbol="206", size=8)))
+#
+#     fig.update_layout(legend_orientation='h')
+#     if proxy == "Google_Trends":
+#         fig.write_image(f"{GOOGLE_LINEAR_MODEL_FIG}/STL_{STL_period}_window{linear_window}_{sym}.png")
+#     else:
+#         fig.write_image(f"{TWITTER_LINEAR_MODEL_FIG}/STL_{STL_period}_window{linear_window}_{sym}.png")
+#     return
 
 def symptom_get_up_down(input_file: str, window: int, sym: str, proxy: str, period:int = 30):
     """
@@ -473,7 +475,7 @@ def get_metrics_from_files(gold_standard_flag: str, proxy: str, symptom_list: li
                 proxy_file = f'{GOOGLE_TREND}/Google_Trends_{sym}_trend_label.csv'
             elif proxy == "Twitter":
                 proxy_file = f'{TWITTER_TREND}/Twitter_{sym}_trend_label.csv'
-            recall_up, precision_up, F1_up, recall_down, precision_down, F1_down = get_TP(flag=gold_standard_flag, gold_standard=gold_standard_file, proxy_trend_file=proxy_file, date_split=date_split)
+            recall_up, precision_up, F1_up, recall_down, precision_down, F1_down = get_metrics(flag=gold_standard_flag, gold_standard=gold_standard_file, proxy_trend_file=proxy_file, date_split=date_split)
             result.append([sym, recall_up, precision_up, F1_up, recall_down, precision_down, F1_down])
         except:
             continue
@@ -490,7 +492,7 @@ def combined(proxy: str, symptoms: list, alpha: float, report_csv: bool, filter_
     """
     This funcition is used to get combined p_value and up/down trend.
     """
-    from collections import Counter
+
     # combine all up/down trends of all symptoms into one dataframe
     if proxy == "Google_Trends":
         df_1 = pd.read_csv(f"{GOOGLE_TREND}/Google_Trends_{symptoms[0]}_trend_label.csv")
@@ -512,8 +514,7 @@ def combined(proxy: str, symptoms: list, alpha: float, report_csv: bool, filter_
     trend_df.columns = symptoms
     trend_df.index = date
 
-
-    # get ensemble trend per row
+    # get ensemble trend per row/date
     ensemble_trend_list = []
     for i in range(len(trend_df)):
         trends = list(trend_df.iloc[i, :])
@@ -546,7 +547,8 @@ def combined(proxy: str, symptoms: list, alpha: float, report_csv: bool, filter_
                     print('you need to generate all trend files first.')
                     logger.error("you need to generate all trend files first.")
 
-            w = len(p_value_list)  # equally weights
+            # harmonic P value calculation with equal weights
+            w = len(p_value_list)
             demoninator = sum([1 / f_p for f_p in p_value_list])
             harmonic_p.append(w / demoninator)
         elif trend_df.loc[i, 'ensemble_trend'] == 0:
@@ -567,6 +569,7 @@ def combined(proxy: str, symptoms: list, alpha: float, report_csv: bool, filter_
         else:
             up_down_trend.append(0)
     trend_df['up/down trend'] = up_down_trend
+    # check the performance from 2020-02-02.
     trend_df = trend_df.loc["2020-02-02":,:]
 
     # transfer data to .csv file
@@ -665,6 +668,7 @@ def flatten_top_symptom_get_translation(threshold: int, proxy: str, filter_synon
     """
     This function is used to get top sympotoms based on the result of hypergeometics test the the number of co-occurances of docs,
     flatten the symptom lists and get top german symptoms.
+    We check it from 2020-02-02 to 2022-03-02 (the training period).
     """
 
     covid_top = pd.read_csv(f"{COVID_KG_DIR}/COVID_sort_pvalue_occurances.csv")
@@ -738,7 +742,7 @@ def flatten_top_symptom_get_translation(threshold: int, proxy: str, filter_synon
 
 def plot_pairwise(google_dates, combined_dates_lag, gold_standard, trend, year):
     """
-    Function used to plot pairwise events.
+    Function used to plot pairwise time lag between Google Trends, Combined trace and the surveillance incident cases and hospitalization.
     """
     fig = go.Figure()
     fig.add_trace(go.Box(x=google_dates, name='Google Trends', orientation='h'), )

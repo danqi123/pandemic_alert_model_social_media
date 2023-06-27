@@ -363,7 +363,6 @@ class Train(object):
             e = shap.DeepExplainer(self.Model, Variable(torch.from_numpy(np.array(config.train_shap, dtype="float32"))).to(self.device))
             torch.backends.cudnn.enabled=False
             shap_values = e.shap_values(Variable(torch.from_numpy(np.array(config.test_shap, dtype="float32"))).to(self.device))
-            
             # select up-trends class
             shap_value_array = shap_values[1]
 

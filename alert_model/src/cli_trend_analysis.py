@@ -13,7 +13,7 @@ from startup import RKI, RKI_death, RKI_hospitalization, PROCESSED_DATA, GOOGLE_
 	GOLD_STANDARD_EVENT, GOOGLE_TREND, TWITTER_TREND, GOOGLE_TRENDS_DATA, TWITTER_DATA
 from log_linear_regression import read_csv, linear_model, visualization_trend, filter_date, STL_decomposition, \
 	symptom_get_up_down, get_metrics_from_files, get_up_down_from_linear_model, flatten_top_symptom_get_translation, \
-	combined, get_TP, get_combined_p, plot_pairwise
+	combined, get_metrics, get_combined_p, plot_pairwise
 from date import filter_dates, get_date_interval, transfer_date, filter_dates_trend_analysis
 
 logger = logging.getLogger(__name__)
@@ -88,7 +88,6 @@ def get_trends_from_gold_standard(gold_standard: str, filter_dates: bool) -> Non
 		logger.info(f'{gold_standard}_up_and_down_events have been retrieved and saved in folder {output_path}.')
 	print(up, down)
 
-
 @trend_analysis.command(name = "generate_proxy_trend")
 @click.argument('proxy')
 @click.argument('input_file')
@@ -114,7 +113,7 @@ def generate_proxy_trend(proxy: str, input_file: str, window: str, period: str) 
 @click.argument('split_date')
 def generate_evaluation_metrics(gold_standard: str, proxy: str, split_date: str) -> pd.DataFrame:
 	"""
-	Perform evaluation metrics for all symptoms from Google_Trends OR Twitter.
+	Perform evaluation metrics for individual symptom from Google_Trends OR Twitter.
 	"""
 	df = pd.DataFrame()
 	if proxy == "Google_Trends":
@@ -270,7 +269,7 @@ def generate_metrics_for_combined_proxy_or_combinedP(proxy: str, gold_standard: 
 		folder = COMBINED_TREND_METRICS
 		proxy_file = f'{folder}/Combined_trend.csv'
 	metric_dict = {}
-	recall_up, precision_up, F1_up, recall_down, precision_down, F1_down = get_TP(flag=gold_standard, gold_standard=f'{GOLD_STANDARD_TREND}/{gold_standard}_trend_label.csv', proxy_trend_file=proxy_file, date_split=date_split)
+	recall_up, precision_up, F1_up, recall_down, precision_down, F1_down = get_metrics(flag=gold_standard, gold_standard=f'{GOLD_STANDARD_TREND}/{gold_standard}_trend_label.csv', proxy_trend_file=proxy_file, date_split=date_split)
 	metric_dict['up_events_sensitivity'] = recall_up
 	metric_dict['up_events_precision'] = precision_up
 	metric_dict['up_events_F1'] = F1_up

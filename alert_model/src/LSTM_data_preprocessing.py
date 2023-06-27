@@ -65,7 +65,6 @@ def data_preprocessing_pipeline(proxy: str, trend: str, training_length: int, fo
         dataset = pd.read_csv(f'{folder}/Combined_RKI_case.csv')
 
     dataset = dataset.set_index('date')
-
     new_dataset = dataset["2020-03-01":]
     dataset = new_dataset.copy()
     test_dataset = dataset.copy()
