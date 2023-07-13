@@ -63,7 +63,7 @@ def compile_google_trends(file: str, start_year: int, start_month: int, end_year
 
     f = open(f'{COVID_KG_DIR}/{file}')
     data = json.load(f)
-    get_google_trends_daily(data, start_year, start_month, end_year, end_month, geo, start, end)
+    get_google_trends_daily(data, start_year, start_month, end_year, end_month, geo)
 
 
 if __name__ == "__main__":
