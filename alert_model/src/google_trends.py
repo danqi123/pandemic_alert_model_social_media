@@ -35,9 +35,7 @@ def get_google_trends_daily(key_word_list: list,
                             start_month: int,
                             end_year: int,
                             end_month: int,
-                            geo: str,
-                            start: int,
-                            end: int) -> None:
+                            geo: str) -> None:
 
     """Generate DAILY Google_Trends data."""
     frames = []
@@ -53,7 +51,7 @@ def get_google_trends_daily(key_word_list: list,
 
     result = pd.concat(frames, axis=1)
 
-    sym_file_path = f"{PROCESSED_DATA}/daily_google_german_{start}_{end}_{geo}.csv"
+    sym_file_path = f"{PROCESSED_DATA}/daily_google_german.csv"
     result.to_csv(sym_file_path, encoding='utf_8_sig')
 
     logger.info(f"{geo}_{key_word_list} DAILY google trends Data is generated.")
