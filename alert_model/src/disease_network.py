@@ -155,32 +155,6 @@ def get_count_request(terms: list)-> int:
     except:
         return 0
 
-
-def get_docs(doc_id: str) -> str:
-    """
-    get documents for specific IDs.
-    """
-
-    headers = {'Accept': 'text/html'}
-    URL = f"https://api.academia.scaiview.com/api/v6/documents/{doc_id}"
-    r = requests.get(URL, headers=headers)
-    doc = ''
-    if r.status_code == 200:
-        soup = BeautifulSoup(r.text, 'lxml')
-        # print(soup.prettify())
-        for node in soup.findAll('u'):
-            doc += ''.join(node.findAll(text = True))
-        if doc:
-            logger.info(f'Document for {doc_id} is downloaded.')
-        else:
-            logger.error(f'No document for {doc_id} in SCAIView.')
-        return doc
-
-    else:
-        logger.error(f'No document for {doc_id} in SCAIView.')
-        return ''
-
-
 def hypergeometric(disease: str, symptom: str, disease_symptom_docs: int) -> float:
     """
     perform hypergeometric test given disease and symptom.
