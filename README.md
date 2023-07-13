@@ -200,6 +200,6 @@ forecasting horizon: consistent with the time interval in log-linear regression 
 All source code that is specific to this project.
 
 ## Citation
-This work is in process of peer-review, please cite the following DOI: https://doi.org/10.21203/rs.3.rs-3108281/v1
+This work is going to be in the process of peer-review, please cite the following DOI: https://doi.org/10.21203/rs.3.rs-3108281/v1
 
 <p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>
