@@ -3,8 +3,8 @@
 
 The repository contains codes and data for the manuscript "Development of an early alert model for pandemic situations in Germany". 
 
-The paper conatains three parts:
-1. Generation of symptom corpus and preparation of Google Trends/Twitter longitudinal datasets with multidimentional symptom features.
+The paper contains three parts:
+1. Generation of symptom corpus and preparation of Google Trends/Twitter longitudinal datasets with multidimensional symptom features.
 2. Log-linear regression model for up-/ down-trend analysis.
 3. Random Forest and LSTMs for up-/ down-trend forecasting.
 
@@ -19,8 +19,8 @@ Project Organization
     │   ├── Combined                    <- The final results of trend analysis (Combined trace)
     │   ├── Google_Trends               <- The final results of trend analysis (Google Trends)
     │   ├── Twitter                     <- The final results of trend analysis (Twitter)
-    │   ├── Knowledge_graph             <- The final results of hypergeometric test.
-    │   ├── processed                   <- The retrieval Google Trends/ Twitter longitudinal datasets and symptoms with German translations.
+    │   ├── Knowledge_graph             <- The final results of the hypergeometric test.
+    │   ├── processed                   <- The retrieval of Google Trends/ Twitter longitudinal datasets and symptoms with German translations.
     │   └── raw                         <- The raw data of surveillance gold standards (confirmed cases, deaths, and hospitalization.)
     │
     ├── models                          <- Contains the optimal hyperparameters for constructing retrained models.
@@ -44,19 +44,19 @@ Project Organization
     │   ├── google_trends.py            <- Scripts to retrieve Google Trends data.
     │   ├── twitter_api.py              <- Scripts to retrieve Twitter data.
     │   ├── log_linear_regression.py    <- Source Scripts to perform log-linear regression model.
-    │   ├── cli_trend_analysis.py       <- Click file to perform log-linear regression model.
+    │   ├── cli_trend_analysis.py       <- Click the file to perform a log-linear regression model.
     │   ├── RF_data_preprocessing.py    <- Scripts to preprocess data for performing Random Forest.  
-    │   ├── Random_Forest_optuna.py     <- Scripts to tune hyperparamters in Random Forest.
-    │   ├── Random_Forest.py            <- Run Random Forest models and evaluate on test set.
+    │   ├── Random_Forest_optuna.py     <- Scripts to tune hyperparameters in Random Forest.
+    │   ├── Random_Forest.py            <- Run Random Forest models and evaluate on the test set.
     │   ├── LSTM_data_preprocessing.py  <- Scripts to preprocess data for LSTMs.
     │   ├── LSTM_train_optuna.py        <- Scripts to tune hyperparameters in LSTMs.
-    │   ├── LSTM_train.py               <- Scripts to train LSTMs, evaluate on test set, and perform SHAP algorithm.
+    │   ├── LSTM_train.py               <- Scripts to train LSTMs, evaluate on the test set, and perform SHAP algorithm.
     └── tox.ini                         <- tox file with settings for running tox; see tox.readthedocs.io
 
 
 --------
 
-## Generate knowledge graph to get the symptom corpus.
+## Generate a knowledge graph to get the symptom corpus.
 
 **input data**: symptoms from symptom ontology (https://www.ebi.ac.uk/ols/ontologies/symp)
 
@@ -64,7 +64,7 @@ Project Organization
               SYMP_ONTOLOGY = "data_repo/raw/symp.json"
 
 **output data**: 
-The top German ymptoms from hypergeometric test with low p_value and high volume of co-occurances in SCAIView knowledge software (https://academia.scaiview.com/)
+The top German symptoms from the hypergeometric test with low p_value and high volume of co-occurrences in SCAIView knowledge software (https://academia.scaiview.com/)
 
 (/data_repo/Knowledge_graph/COVID/COVID_symptoms_from_hypergeometrictest.json)
 
@@ -76,13 +76,13 @@ The top German ymptoms from hypergeometric test with low p_value and high volume
     python3 knowledge_graph.py get_symptoms_count
 #### 4. Get disease symptoms dict with corresponding p_values from hypergeometric test
     python3 knowledge_graph.py perform_disease_hypergeo_test COVID 0.05 -v
-#### 5. Get top disease related symptoms (COVID)
+#### 5. Get top disease-related symptoms (COVID)
     python3 knowledge_graph.py get_top_relevant_symptoms 0.05 50
-#### 6. Plot the symptoms with descending co-occurances with COVID-19 in PubMed/PMC.
+#### 6. Plot the symptoms with descending co-occurrences with COVID-19 in PubMed/PMC.
     python3 knowledge_graph.py show_plot COVID_sort_pvalue_occurances.csv 25
 #### 7. Symptom translation
-    use DeepL software to translate the top English symptoms from Knowledge graph into German.
-    Note: here we give an example of the german terms we retrieved till June 2022. If you translate the terms into France OR retrieve new data, you should replace the file with the route:
+    uses DeepL software to translate the top English symptoms from the Knowledge graph into German.
+    Note: here we give an example of the German terms we retrieved till June 2022. If you translate the terms into France OR retrieve new data, you should replace the file with the route:
     (SCAIVIEW_SYMPTOM = "/data_repo/processed/symptom_translations.csv") 
 #### 8. Get German symptom terms
     input: the translated German symptoms.
@@ -91,19 +91,19 @@ The top German ymptoms from hypergeometric test with low p_value and high volume
 
 ## Social media and gold standard longitudinal datasets
 #### 1. Download Gold Standard data from Germany RKI.
-     Surveillance data can be retrieved from Robert Koch-Institut (RKI) GitHub repository (https://github.com/orgs/robert-koch-institut/repositories)
+     Surveillance data can be retrieved from the Robert Koch-Institut (RKI) GitHub repository (https://github.com/orgs/robert-koch-institut/repositories)
      The surveillance data from 2020-03-01 to 2022-06-28 is downloaded and saved in /data/raw/.
-#### 2. Retrieve social media data from Google Trends and Twitter with the symptom queries from knowledge graph.
+#### 2. Retrieve social media data from Google Trends and Twitter with the symptom queries from the knowledge graph.
      Google Trends: src/scripts/google_trends.py
      Twitter: src/scripts/twitter_api.py (NEED credentials of academic Twitter developer API)
-     Note: here we retieved Google and Twitter data from Jan 2020 to Jun 2022 as an example.
+     Note: here we received Google and Twitter data from Jan 2020 to Jun 2022 as an example.
      and data is in 'data/processed/daily_google_german.csv' and 'data/processed/daily_twitter_german.csv'
 
 ## Trend analysis
 ### Background of trend analysis
 - **STL decomposition to get the trend of time series raw data**(https://www.statsmodels.org/dev/examples/notebooks/generated/stl_decomposition.html)
   - For Google Trends and Twitter, STL period: 30
-  - For RKI confirmed cases, deaths and hospitalization, STL period: 7
+  - For RKI confirmed cases, deaths, and hospitalization, STL period: 7
 - **Log-linear regression model**:
   - window size: 14 days
   - stride: 1 day
@@ -118,10 +118,10 @@ The top German ymptoms from hypergeometric test with low p_value and high volume
     python3 cli_trend_analysis.py get_trends_from_gold_standard RKI_case -f
     python3 cli_trend_analysis.py get_trends_from_gold_standard RKI_death -f 
     python3 cli_trend_analysis.py get_trends_from_gold_standard RKI_hospitalization -f
-#### 3. making symptom-level trend analysis (Google Trends and Twitter)
+#### 3. Making symptom-level trend analysis (Google Trends and Twitter)
     python3 cli_trend_analysis.py generate_proxy_trend Google_Trends daily_google_german.csv 14 30
     python3 cli_trend_analysis.py generate_proxy_trend Twitter daily_twitter_german.csv 14 30
-#### 4. Get evaluation metrics of individual symptom and save the .csv file (Google Trends and Twitter)
+#### 4. Get evaluation metrics of individual symptoms and save the .csv file (Google Trends and Twitter)
     python3 cli_trend_analysis.py generate_evaluation_metrics RKI_case Google_Trends 2022-03-01
     python3 cli_trend_analysis.py generate_evaluation_metrics RKI_hospitalization Google_Trends 2022-03-01
     python3 cli_trend_analysis.py generate_evaluation_metrics RKI_death Google_Trends 2022-03-01
@@ -129,14 +129,14 @@ The top German ymptoms from hypergeometric test with low p_value and high volume
     python3 cli_trend_analysis.py generate_evaluation_metrics RKI_case Twitter 2022-03-01
     python3 cli_trend_analysis.py generate_evaluation_metrics RKI_hospitalization Twitter 2022-03-01
     python3 cli_trend_analysis.py generate_evaluation_metrics RKI_death Twitter 2022-03-01
-#### 5. Get top 20 symptoms (based on the result of hypergeometric test) for each digital trace (Google Trends and Twitter)
+#### 5. Get the top 20 symptoms (based on the result of the hypergeometric test) for each digital trace (Google Trends and Twitter)
     python3 cli_trend_analysis.py get_symptoms 20 google -f
-    python3 cli_trend_analysis.py get_symptoms 20 twitter -f 
+    python3 cli_trend_analysis.py get_symptoms 20 Twitter -f 
 #### 6. Making digital trace (Google Trends, Twitter, and Combined) trend analysis and get up- and down-trends
     python3 cli_trend_analysis.py combined_proxy 20 Google_Trends 0.05 2022-03-01 -r -f
     python3 cli_trend_analysis.py combined_proxy 20 Twitter 0.05 2022-03-01 -r -f
     python3 cli_trend_analysis.py get_combined_P_trends 0.05 2022-03-01 -f
-#### 7. Get evaluation metrics for each digital trace (Google Trends, Twitter and Combined trace)
+#### 7. Get evaluation metrics for each digital trace (Google Trends, Twitter, and Combined trace)
     python3 cli_trend_analysis.py generate_metrics_for_combined_proxy_or_combinedP Google_Trends RKI_case 2022-03-01
     python3 cli_trend_analysis.py generate_metrics_for_combined_proxy_or_combinedP Google_Trends RKI_death 2022-03-01
     python3 cli_trend_analysis.py generate_metrics_for_combined_proxy_or_combinedP Google_Trends RKI_hospitalization 2022-03-01
@@ -164,9 +164,9 @@ The top German ymptoms from hypergeometric test with low p_value and high volume
 --------
 ## Trend forecasting
 ### Random Forest
-Note: The forecasting horizon is set based on the result of trend analysis. We set the timepoints to split train/test sets.
+Note: The forecasting horizon is set based on the result of trend analysis. We set the time points to split train/test sets.
 training length: 28 days
-forecasting horizon: consistent with the time interval in log-linear regression model: 14 days
+forecasting horizon: consistent with the time interval in the log-linear regression model: 14 days
 
 #### 1. Prepare dataset for all feature space (Google Trends/Combined)
     Note: proxy: Google; Combined
@@ -200,6 +200,6 @@ forecasting horizon: consistent with the time interval in log-linear regression 
 All source code that is specific to this project.
 
 ## Citation
-This work is going to be in the process of peer-review, please cite the following DOI: https://doi.org/10.21203/rs.3.rs-3108281/v1
+This work is going to be in the process of peer review, please cite the following DOI: https://doi.org/10.21203/rs.3.rs-3108281/v1
 
 <p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>
