@@ -129,17 +129,6 @@ def get_date_diff(date1, date2):
     interval = d2-d1
     return interval.days
 
-# def get_date_hit(anomalies_list: list, trend_data: list) -> list:
-#     """
-#     Get the TP dates within 30 days window ahead of up-trend onsets of surveillance data.
-#     """
-#     date_hit = []
-#     for d1 in anomalies_list:
-#         for d2 in trend_data:
-#             if 0 < get_date_diff(d1, d2) <= 30 and d1 not in date_hit:
-#                 date_hit.append(d1)
-#     return date_hit
-
 
 def convert_list_to_str(list_: list) -> str:
     """
@@ -400,35 +389,6 @@ def visualization_trend(case_trend:pd.DataFrame, death_trend:pd.DataFrame, hos_t
     fig.update_layout(showlegend = True)
     fig.write_image(f"{TREND_VISUALIZATION_FIG}/visualization_trend_and_up_down_events.png", scale=5)
     return
-
-# def plot_up_down(df: pd.DataFrame, linear_df: pd.DataFrame, sym: str, STL_period: int, up_trend_dates: list, down_trend_dates: list, linear_window: int, proxy: str, alpha:float = 0.05):
-#     """
-#     this function is used to plot the up and down trends from linear model.
-#     """
-#     up_trend_value = []
-#     up_p_value = []
-#     for d in up_trend_dates:
-#         up_trend_value.extend(df[df["date"]==d][sym].tolist())
-#         up_p_value.extend(linear_df[linear_df['date']==d][f'p_value Holm (alpha={alpha})'])
-#     up_p_value = [elem*10 for elem in up_p_value]
-#
-#     down_trend_value = []
-#     down_p_value = []
-#     for d in down_trend_dates:
-#         down_trend_value.extend(df[df["date"]==d][sym].tolist())
-#         down_p_value.extend(linear_df[linear_df['date']==d][f'p_value Holm (alpha={alpha})'])
-#     down_p_value = [elem*10 for elem in down_p_value]
-#
-#     fig = px.area(df, x="date", y=sym)
-#     fig.add_trace(go.Scatter(x=up_trend_dates, y=up_trend_value, mode="markers", name='Up Trends', marker=dict(color="red", symbol="205", size=8)))
-#     fig.add_trace(go.Scatter(x=down_trend_dates, y=down_trend_value, mode="markers", name='Down Trends', marker=dict(color="green", symbol="206", size=8)))
-#
-#     fig.update_layout(legend_orientation='h')
-#     if proxy == "Google_Trends":
-#         fig.write_image(f"{GOOGLE_LINEAR_MODEL_FIG}/STL_{STL_period}_window{linear_window}_{sym}.png")
-#     else:
-#         fig.write_image(f"{TWITTER_LINEAR_MODEL_FIG}/STL_{STL_period}_window{linear_window}_{sym}.png")
-#     return
 
 def symptom_get_up_down(input_file: str, window: int, sym: str, proxy: str, period:int = 30):
     """
