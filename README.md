@@ -200,6 +200,6 @@ forecasting horizon: consistent with the time interval in the log-linear regress
 All source code that is specific to this project.
 
 ## Citation
-This work is going to be in the process of peer review, please cite the following DOI: https://doi.org/10.21203/rs.3.rs-3108281/v1
-
+Wang, D., Lentzen, M., Botz, J. et al. Development of an early alert model for pandemic situations in Germany. Sci Rep 13, 20780 (2023). https://doi.org/10.1038/s41598-023-48096-3
+DOI: https://doi.org/10.1038/s41598-023-48096-3
 <p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>
